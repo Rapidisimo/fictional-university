@@ -1,25 +1,13 @@
 class MyNotes {
     constructor() {
-        this.deleteButtons = document.querySelectorAll('.delete-note');
-        this.editButtons = document.querySelectorAll('.edit-note');
-        this.saveButtons = document.querySelectorAll('.update-note');
-        this.submitButton = document.querySelector('.submit-note');
-        this.listOfNotes = document.querySelector('#my-notes');
-        this.events();
+        if(window.location.pathname.endsWith('my-notes/')) {
+            this.submitButton = document.querySelector('.submit-note');
+            this.listOfNotes = document.querySelector('#my-notes');
+            this.events();
+        }
     }
 
     events() {
-        // this.deleteButtons.forEach( (button) => {
-        //     button.addEventListener('click', (e) => this.deleteNote(e));
-        // })
-
-        // this.editButtons.forEach( (button) => {
-        //     button.addEventListener('click', (e) => this.editNote(e));
-        // })
-
-        // this.saveButtons.forEach( (button) => {
-        //     button.addEventListener('click', (e) => this.updateNote(e));
-        // })
 
         // Continue adding else if for other buttons
         this.listOfNotes.addEventListener('click', (e) => {
