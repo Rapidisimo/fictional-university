@@ -1,0 +1,11 @@
+# Ignore dependency directories
+node_modules/
+vendor/
+
+# Ignore compiled assets (if applicable)
+*.map
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
