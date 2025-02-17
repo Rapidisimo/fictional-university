@@ -109,23 +109,29 @@ class MyNotes {
                 headers: myHeaders,
                 body: JSON.stringify(ourNewPost)
             });
+
+            const jsonData = await response.json();
+            
             if(!response.ok) {
+                if(jsonData.data.message === 'You have reached your note limit') {
+                    console.log("Result:", jsonData);
+                    alert(jsonData.data.message);
+                    return;
+                }
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            const json = await response.json();
-            console.log("Success:", json);
             // reset form
             noteTitle.value = "";
             noteContent.value = "";
             // add newly created note to DOM
             const newNote = document.createElement('li');
-            newNote.dataset.postId = json.id;
+            newNote.dataset.postId = jsonData.id;
             newNote.innerHTML = `
-                <input readonly value="${json.title.raw}" class="note-title-field">
+                <input readonly value="${jsonData.title.raw}" class="note-title-field">
                 <span class="edit-note"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</span>
                 <span class="delete-note"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</span>
-                <textarea readonly class="note-body-field">${json.content.raw}</textarea>
+                <textarea readonly class="note-body-field">${jsonData.content.raw}</textarea>
                 <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i>Save</span>
             `;
             // Add note to the top of the list of notes
