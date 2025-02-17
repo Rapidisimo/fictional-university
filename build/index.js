@@ -292,8 +292,7 @@ class MyNotes {
       const jsonData = await response.json();
       if (!response.ok) {
         if (jsonData.data.message === 'You have reached your note limit') {
-          console.log("Result:", jsonData);
-          alert(jsonData.data.message);
+          document.querySelector('.note-limit-message').classList.add('active');
           return;
         }
         throw new Error(`Response status: ${response.status}`);
