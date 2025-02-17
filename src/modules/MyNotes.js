@@ -42,7 +42,11 @@ class MyNotes {
             }
 
             const json = await response.json();
-            console.log("Success:", json);
+            console.log("Response:", json);
+
+            if(json.userNoteCount < 5) {
+                document.querySelector('.note-limit-message').classList.remove('active');
+            }
             if(json.status === "trash") {
                 currentNote.remove();
             }else {
