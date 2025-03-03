@@ -189,11 +189,39 @@ class Like {
       this.createLike();
     }
   }
-  createLike() {
-    console.log('Create Like');
+  async createLike() {
+    const url = `${universityData.root_url}/wp-json/university/v1/managelike`;
+    try {
+      const response = await fetch(url, {
+        method: "POST"
+      });
+      const jsonData = await response.json();
+      if (!response.ok) {
+        throw new Error('Response status: ${response.status}');
+      }
+      if (response.ok) {
+        console.log(jsonData.data);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   }
-  deleteLike() {
-    console.log('Delete Like');
+  async deleteLike() {
+    const url = `${universityData.root_url}/wp-json/university/v1/managelike`;
+    try {
+      const response = await fetch(url, {
+        method: "DELETE"
+      });
+      const jsonData = await response.json();
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      if (response.ok) {
+        console.log(jsonData.data);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Like);
