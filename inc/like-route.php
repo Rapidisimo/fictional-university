@@ -16,12 +16,31 @@ function universityLikeRoutes()
 }
 
 
-function createLike()
+function createLike($data) //adding a parameter to access the data being sent back
 {
-    return wp_send_json_success('Thanks for trying to create a like!');
+    $professor = sanitize_text_field($data['professorId']);
+    $newLikeId = wp_insert_post([
+        'post_type' => 'like',
+        'post_status' => 'publish',
+        'post_title' => 'Like post for professor' . $professor,
+        'meta_input' => [ //acf field that we'll assign a value
+            'liked_professor_id' => $professor
+        ],
+    ]);
+
+    if ($newLikeId) {
+        return rest_ensure_response([
+            'message' => 'Like created successfully',
+            'likeId' => $newLikeId
+        ]);
+    } else {
+        return new WP_Error('cant-create-like', 'Failed to create like', ['status' => 500]);
+    }
 }
 
 function deleteLike()
 {
-    return wp_send_json_success('Thanks for trying to delete a like!');
+    return rest_ensure_response([
+        'message' => 'Like delete successfully'
+    ]);
 }
