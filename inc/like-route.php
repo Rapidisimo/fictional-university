@@ -22,7 +22,7 @@ function createLike($data) //adding a parameter to access the data being sent ba
     $newLikeId = wp_insert_post([
         'post_type' => 'like',
         'post_status' => 'publish',
-        'post_title' => 'Like post for professor' . $professor,
+        'post_title' => 'Like post for professor ' . $professor,
         'meta_input' => [ //acf field that we'll assign a value
             'liked_professor_id' => $professor
         ],

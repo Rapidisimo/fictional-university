@@ -184,13 +184,13 @@ class Like {
     console.log(e.target);
     let currentLikeBox = e.target.closest('.like-box');
     if (currentLikeBox.dataset.exists === 'yes') {
-      this.deleteLike();
+      this.deleteLike(currentLikeBox);
     } else {
-      this.createLike();
+      this.createLike(currentLikeBox);
     }
   }
-  async createLike() {
-    const url = `${universityData.root_url}/wp-json/university/v1/managelike?professorId=789`;
+  async createLike(currentLikeBox) {
+    const url = `${universityData.root_url}/wp-json/university/v1/managelike?professorId=${currentLikeBox.dataset.professor}`;
     try {
       const response = await fetch(url, {
         method: "POST"
@@ -204,7 +204,7 @@ class Like {
       console.error(error.message);
     }
   }
-  async deleteLike() {
+  async deleteLike(currentLikeBox) {
     const url = `${universityData.root_url}/wp-json/university/v1/managelike`;
     try {
       const response = await fetch(url, {
