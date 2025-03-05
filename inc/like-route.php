@@ -33,7 +33,7 @@ function createLike($data) //adding a parameter to access the data being sent ba
             ]
         ]);
 
-        if ($existQuery->found_posts === 0) {
+        if ($existQuery->found_posts === 0 && get_post_type($professor) === 'professor') {
             // create new like post
             $newLikeId = wp_insert_post([
                 'post_type' => 'like',
