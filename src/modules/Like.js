@@ -20,28 +20,29 @@ class Like {
         }
     }
 
-async   createLike() {
-        const url = `${universityData.root_url}/wp-json/university/v1/managelike`;
+async createLike() {
+        const url = `${universityData.root_url}/wp-json/university/v1/managelike?professorId=789`;
 
         try {
+
             const response = await fetch(url, {
-                method: "POST",
+                method: "POST"
             });
             
-            const jsonData = await response.json();
-
+            
             if(!response.ok) {
                 throw new Error('Response status: ${response.status}');
             }
-            if(response.ok) {
-                console.log(jsonData.data)
-            }
+            
+            const jsonData = await response.json();
+            console.log(jsonData);
+            
         } catch (error) {
             console.error(error.message);
         }
     }
 
-async   deleteLike() {
+async deleteLike() {
         const url = `${universityData.root_url}/wp-json/university/v1/managelike`;
 
         try {
