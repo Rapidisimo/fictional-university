@@ -191,9 +191,13 @@ class Like {
   }
   async createLike(currentLikeBox) {
     const url = `${universityData.root_url}/wp-json/university/v1/managelike?professorId=${currentLikeBox.dataset.professor}`;
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("X-WP-Nonce", universityData.nonce);
     try {
       const response = await fetch(url, {
-        method: "POST"
+        method: "POST",
+        headers: myHeaders
       });
       if (!response.ok) {
         throw new Error('Response status: ${response.status}');

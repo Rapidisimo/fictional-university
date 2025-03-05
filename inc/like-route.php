@@ -18,23 +18,27 @@ function universityLikeRoutes()
 
 function createLike($data) //adding a parameter to access the data being sent back
 {
-    $professor = sanitize_text_field($data['professorId']);
-    $newLikeId = wp_insert_post([
-        'post_type' => 'like',
-        'post_status' => 'publish',
-        'post_title' => 'Like post for professor ' . $professor,
-        'meta_input' => [ //acf field that we'll assign a value
-            'liked_professor_id' => $professor
-        ],
-    ]);
-
-    if ($newLikeId) {
-        return rest_ensure_response([
-            'message' => 'Like created successfully',
-            'likeId' => $newLikeId
+    if (is_user_logged_in()) {
+        $professor = sanitize_text_field($data['professorId']);
+        $newLikeId = wp_insert_post([
+            'post_type' => 'like',
+            'post_status' => 'publish',
+            'post_title' => 'Like post for professor ' . $professor,
+            'meta_input' => [ //acf field that we'll assign a value
+                'liked_professor_id' => $professor
+            ],
         ]);
+
+        if ($newLikeId) {
+            return rest_ensure_response([
+                'message' => 'Like created successfully',
+                'likeId' => $newLikeId
+            ]);
+        } else {
+            return new WP_Error('cant-create-like', 'Failed to create like', ['status' => 500]);
+        }
     } else {
-        return new WP_Error('cant-create-like', 'Failed to create like', ['status' => 500]);
+        return new WP_Error('Only logged in users can create a like.', ['status' => 403]);
     }
 }
 
