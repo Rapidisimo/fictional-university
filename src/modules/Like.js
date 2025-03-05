@@ -33,13 +33,13 @@ async createLike(currentLikeBox) {
                 headers: myHeaders,
             });
             
+            const jsonData = await response.json();
+            // console.log(jsonData);
             
             if(!response.ok) {
-                throw new Error('Response status: ${response.status}');
+                throw new Error(`Response status: ${response.status} | Response message: ${jsonData.message}`);
             }
             
-            const jsonData = await response.json();
-            console.log(jsonData);
             
         } catch (error) {
             console.error(error.message);
@@ -60,7 +60,7 @@ async deleteLike(currentLikeBox) {
                 throw new Error(`Response status: ${response.status}`);
             }
             if(response.ok) {
-                console.log(jsonData.data)
+                console.log(jsonData)
             }
         } catch (error) {
             console.error(error.message);

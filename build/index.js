@@ -199,11 +199,12 @@ class Like {
         method: "POST",
         headers: myHeaders
       });
-      if (!response.ok) {
-        throw new Error('Response status: ${response.status}');
-      }
       const jsonData = await response.json();
-      console.log(jsonData);
+      // console.log(jsonData);
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status} | Response message: ${jsonData.message}`);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -219,7 +220,7 @@ class Like {
         throw new Error(`Response status: ${response.status}`);
       }
       if (response.ok) {
-        console.log(jsonData.data);
+        console.log(jsonData);
       }
     } catch (error) {
       console.error(error.message);

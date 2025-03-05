@@ -20,25 +20,43 @@ function createLike($data) //adding a parameter to access the data being sent ba
 {
     if (is_user_logged_in()) {
         $professor = sanitize_text_field($data['professorId']);
-        $newLikeId = wp_insert_post([
+
+        $existQuery = new WP_Query([
+            'author'    => get_current_user_id(),
             'post_type' => 'like',
-            'post_status' => 'publish',
-            'post_title' => 'Like post for professor ' . $professor,
-            'meta_input' => [ //acf field that we'll assign a value
-                'liked_professor_id' => $professor
-            ],
+            'meta_query' => [
+                [
+                    'key'       => 'liked_professor_id',
+                    'compare'   => '=',
+                    'value'     => $professor,
+                ]
+            ]
         ]);
 
-        if ($newLikeId) {
-            return rest_ensure_response([
-                'message' => 'Like created successfully',
-                'likeId' => $newLikeId
+        if ($existQuery->found_posts === 0) {
+            // create new like post
+            $newLikeId = wp_insert_post([
+                'post_type' => 'like',
+                'post_status' => 'publish',
+                'post_title' => 'Like post for professor ' . $professor,
+                'meta_input' => [ //acf field that we'll assign a value
+                    'liked_professor_id' => $professor
+                ],
             ]);
+
+            if ($newLikeId) {
+                return rest_ensure_response([
+                    'message' => 'Like created successfully',
+                    'likeId' => $newLikeId
+                ]);
+            } else {
+                return new WP_Error('cant-create-like', 'Failed to create like', ['status' => 500]);
+            }
         } else {
-            return new WP_Error('cant-create-like', 'Failed to create like', ['status' => 500]);
+            return new WP_Error('invalid-prof-id', 'Invalid professor ID.', ['status' => 500]);
         }
     } else {
-        return new WP_Error('Only logged in users can create a like.', ['status' => 403]);
+        return new WP_Error('not-logged-in', 'Only logged in users can create a like.', ['status' => 403]);
     }
 }
 
