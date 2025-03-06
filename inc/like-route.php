@@ -60,9 +60,15 @@ function createLike($data) //adding a parameter to access the data being sent ba
     }
 }
 
-function deleteLike()
+function deleteLike($data)
 {
-    return rest_ensure_response([
-        'message' => 'Like delete successfully'
-    ]);
+    $likeId = sanitize_text_field($data['like']);
+    if (get_current_user_id() == get_post_field('post_author', $likeId) && get_post_type($likeId) == 'like') {
+        wp_delete_post($likeId, true);
+        return rest_ensure_response([
+            'message' => 'Congrats, like deleted.'
+        ]);
+    } else {
+        return new WP_Error('no-permission', 'You do not have permission to delete that.', ['status' => 403]);
+    }
 }
